@@ -5,6 +5,38 @@
 
 ---
 
+## 0. Research and Verification (Must Do Before Implementation)
+
+### 0.1 Mandatory Verification Steps
+**CRITICAL: Before implementing ANY configuration or architectural decision:**
+
+- [ ] **Search official documentation** (Spring Boot, Spring Security, etc.)
+- [ ] **Search industry standards** (check Medium, DEV.to, Baeldung, Stack Overflow)
+- [ ] **Verify with enterprise examples** (check GitHub repositories from major companies)
+- [ ] **Check Spring Boot official guides** (https://spring.io/guides)
+- [ ] **Consult Spring Boot Common Application Properties** (https://docs.spring.io/spring-boot/appendix/application-properties/)
+
+### 0.2 Sources Priority (In Order)
+1. **Official Spring Documentation** - Always primary source
+2. **Spring Boot Reference Guides** - Official examples
+3. **Baeldung** - Well-vetted Java/Spring tutorials
+4. **Enterprise GitHub Repos** - Real-world implementations
+5. **Stack Overflow** - Community consensus (check votes)
+
+### 0.3 What to Verify
+- **Configuration Properties**: Use ONLY standard Spring Boot properties unless absolutely necessary
+- **Dependency Versions**: Use versions from Spring Boot BOM (Bill of Materials)
+- **Security Practices**: Follow OWASP and Spring Security guidelines
+- **Architecture Decisions**: Check Spring Boot best practices documentation
+
+### 0.4 Red Flags (Never Do This)
+- ❌ **Never** use custom property names without checking official docs first
+- ❌ **Never** hardcode secrets in properties files that will be committed
+- ❌ **Never** implement a solution without verifying it's an industry standard
+- ❌ **Never** assume a configuration is correct without testing and verification
+
+---
+
 ## 1. Code Quality Standards
 
 ### 1.1 Code Style
@@ -215,11 +247,82 @@ Error response:
 
 ## 8. Git Commit Standards
 
-### 8.1 Commit Message Format
+### 8.1 Golden Rules (MUST FOLLOW)
+
+#### ❌ NEVER Do This
+```bash
+# WRONG: Adding everything at once
+git add .
+git commit -m "update code"
+
+# WRONG: Multiple unrelated changes in one commit
+git add pom.xml application.properties User.java
+git commit -m "update files"
+```
+
+**Why this is bad**:
+- Cannot revert specific changes
+- Hard to review
+- Hard to debug (git bisect becomes useless)
+- Unclear history
+
+#### ✅ ALWAYS Do This
+```bash
+# CORRECT: Stage files by logical change
+git add docs/00_DEV_STANDARDS.md
+git commit -m "docs: add research verification requirements"
+
+git add src/main/resources/application.properties .env.example
+git commit -m "build: configure H2 database and logging settings"
+
+git add pom.xml
+git commit -m "build: enable Spring Security and JWT dependencies"
+```
+
+**Why this is good**:
+- Each commit is atomic (one logical change)
+- Easy to revert specific commit
+- Easy to review changes
+- Clear history
+
+### 8.2 Commit Workflow (Step by Step)
+
+#### Step 1: Check what changed
+```bash
+git status
+git diff
+```
+
+#### Step 2: Group changes by logical purpose
+Example: If you changed 5 files, group them:
+- Group A: Configuration files (pom.xml, application.properties)
+- Group B: Entity and Repository (User.java, UserRepository.java)
+- Group C: Service layer (UserService.java, AuthService.java)
+
+#### Step 3: Commit each group separately
+```bash
+# Commit Group A
+git add pom.xml application.properties
+git status  # Verify only these files are staged
+git commit -m "build: configure database and security dependencies"
+
+# Commit Group B
+git add src/main/java/com/fivepapa/backend/entity/User.java
+git add src/main/java/com/fivepapa/backend/repository/UserRepository.java
+git status  # Verify only these files are staged
+git commit -m "feat: create User entity and repository"
+
+# Commit Group C
+git add src/main/java/com/fivepapa/backend/service/
+git status  # Verify only these files are staged
+git commit -m "feat: implement authentication and user services"
+```
+
+### 8.3 Commit Message Format
 ```
 <type>: <subject>
 
-<body>
+<body (optional)>
 
 Examples:
 feat: add user registration endpoint
@@ -229,7 +332,7 @@ test: add unit tests for UserService
 refactor: simplify password validation logic
 ```
 
-### 8.2 Commit Types
+### 8.4 Commit Types
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -237,6 +340,56 @@ refactor: simplify password validation logic
 - `refactor`: Code refactoring
 - `style`: Code style changes (formatting)
 - `chore`: Build/dependency updates
+- `build`: Changes to build system or dependencies
+
+### 8.5 What Makes a Good Commit?
+
+#### ✅ Good Commits
+```
+feat: add User entity with JPA annotations
+feat: create UserRepository with custom queries
+build: add H2 database dependency
+test: add unit tests for AuthService registration
+```
+
+**Characteristics**:
+- One logical change
+- Clear, descriptive message
+- Can be reverted independently
+- All tests pass after this commit
+
+#### ❌ Bad Commits
+```
+update code
+fix bugs
+wip
+add stuff
+misc changes
+```
+
+**Problems**:
+- Unclear what changed
+- Probably contains multiple unrelated changes
+- Cannot understand purpose from message
+- Hard to revert
+
+### 8.6 Commit Size Guidelines
+
+| Size | Description | Example | Verdict |
+|------|-------------|---------|---------|
+| **Too Small** | Single line change without context | Changed a variable name | ❌ Consider combining with related changes |
+| **Just Right** | One logical unit of work | Added User entity with all annotations | ✅ Perfect |
+| **Too Large** | Multiple features/fixes together | Added entities + services + controllers + tests | ❌ Split into multiple commits |
+
+### 8.7 Before Each Commit - Checklist
+
+- [ ] Run `git status` to see what changed
+- [ ] Run `git diff` to review actual changes
+- [ ] Stage ONLY related files for this commit
+- [ ] Verify staged files with `git status` again
+- [ ] Write clear commit message following format
+- [ ] If possible, compile and test before committing
+- [ ] Push to remote regularly (don't keep 50 local commits)
 
 ---
 
