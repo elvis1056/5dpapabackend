@@ -28,12 +28,50 @@
 - **Dependency Versions**: Use versions from Spring Boot BOM (Bill of Materials)
 - **Security Practices**: Follow OWASP and Spring Security guidelines
 - **Architecture Decisions**: Check Spring Boot best practices documentation
+- **Project Structure**: Verify package organization follows Spring Boot recommendations
+- **Design Patterns**: Confirm patterns are industry-standard before implementation
 
-### 0.4 Red Flags (Never Do This)
+### 0.4 Mandatory Verification Checkpoints (When I MUST Search)
+
+**I (Claude) MUST perform web search and verification for:**
+
+1. **Before creating project structure**
+   - ✅ Search: "Spring Boot project structure best practices [year] official"
+   - ✅ Read: Official Spring Boot documentation on code structure
+   - ✅ Verify: Check enterprise examples (Netflix, Alibaba, etc.)
+   - ✅ Ask user: Present findings and ask for decision
+
+2. **Before adding any configuration**
+   - ✅ Search: Check Spring Boot official properties documentation
+   - ✅ Verify: Is this a standard property or custom?
+   - ✅ If custom: Search for industry best practices
+
+3. **Before implementing security features**
+   - ✅ Search: OWASP guidelines + Spring Security official docs
+   - ✅ Verify: Check if approach is recommended by Spring Security team
+
+4. **Before choosing any library/dependency**
+   - ✅ Search: Check if it's maintained and widely used
+   - ✅ Verify: Version compatibility with Spring Boot BOM
+
+5. **Before implementing any design pattern**
+   - ✅ Search: Verify it's a recognized industry pattern
+   - ✅ Check: Spring official guides for recommended approach
+
+**Process:**
+1. Stop and search BEFORE making the decision
+2. Present findings to user with sources
+3. Explain pros/cons of different approaches
+4. Ask user to make the final decision
+5. Document the decision and reasoning
+
+### 0.5 Red Flags (Never Do This)
 - ❌ **Never** use custom property names without checking official docs first
 - ❌ **Never** hardcode secrets in properties files that will be committed
 - ❌ **Never** implement a solution without verifying it's an industry standard
 - ❌ **Never** assume a configuration is correct without testing and verification
+- ❌ **Never** make architectural decisions without web search verification
+- ❌ **Never** proceed with implementation if user asks "is this industry standard?"
 
 ---
 
