@@ -58,9 +58,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList(
+        // Development: Allow all origins for testing
+        // Production: Should restrict to specific domains only
+        configuration.setAllowedOriginPatterns(Arrays.asList(
                 "https://elvis1056.github.io",
-                "http://localhost:3000"
+                "http://localhost:*",
+                "http://127.0.0.1:*"
         ));
 
         configuration.setAllowedMethods(Arrays.asList(
