@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserPrincipal {
 
-    private Long userId;
+    private Long id;
     private String username;
     private String email;
     private String role;

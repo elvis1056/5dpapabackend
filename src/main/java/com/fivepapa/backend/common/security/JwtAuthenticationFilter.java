@@ -50,12 +50,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 if (jwtUtil.validateToken(jwt)) {
-                    Long userId = jwtUtil.extractUserId(jwt);
+                    Long id = jwtUtil.extractUserId(jwt);
                     String email = jwtUtil.extractEmail(jwt);
                     String role = jwtUtil.extractRole(jwt);
 
                     // Create custom principal with user information
-                    UserPrincipal principal = new UserPrincipal(userId, username, email, role);
+                    UserPrincipal principal = new UserPrincipal(id, username, email, role);
 
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             principal,
