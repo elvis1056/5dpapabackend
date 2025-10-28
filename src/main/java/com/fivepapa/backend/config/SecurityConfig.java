@@ -51,7 +51,7 @@ public class SecurityConfig {
                 .csrf(csrf -> {
                     csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestHandler)
-                        .ignoringRequestMatchers("/api/auth/login", "/api/auth/register");
+                        .ignoringRequestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh", "/api/auth/logout");
 
                     // Disable CSRF for H2 Console in development
                     if (isDevelopment) {
@@ -60,7 +60,7 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests(auth -> {
                     // Public endpoints
-                    auth.requestMatchers("/api/auth/login", "/api/auth/register", "/api/csrf").permitAll();
+                    auth.requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh", "/api/auth/logout", "/api/csrf").permitAll();
 
                     // H2 Console - only allow in development
                     if (isDevelopment) {
