@@ -51,7 +51,15 @@ public class SecurityConfig {
                 .csrf(csrf -> {
                     csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .csrfTokenRequestHandler(requestHandler)
-                        .ignoringRequestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh", "/api/auth/logout");
+                        .ignoringRequestMatchers(
+                                // Public information endpoints (read-only)
+                                "/", "/health",
+                                // Authentication endpoints
+                                "/api/auth/login",
+                                "/api/auth/register",
+                                "/api/auth/refresh",
+                                "/api/auth/logout"
+                        );
 
                     // Disable CSRF for H2 Console in development
                     if (isDevelopment) {
@@ -59,15 +67,24 @@ public class SecurityConfig {
                     }
                 })
                 .authorizeHttpRequests(auth -> {
-                    // Public endpoints
-                    auth.requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh", "/api/auth/logout", "/api/csrf").permitAll();
+                    // ===== Public Information Endpoints =====
+                    auth.requestMatchers("/", "/health").permitAll();
 
-                    // H2 Console - only allow in development
+                    // ===== Authentication Endpoints =====
+                    auth.requestMatchers(
+                            "/api/auth/login",
+                            "/api/auth/register",
+                            "/api/auth/refresh",
+                            "/api/auth/logout",
+                            "/api/csrf"
+                    ).permitAll();
+
+                    // ===== Development Only Endpoints =====
                     if (isDevelopment) {
                         auth.requestMatchers("/h2-console/**").permitAll();
                     }
 
-                    // All other requests require authentication
+                    // ===== All Other Requests Require Authentication =====
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session ->
