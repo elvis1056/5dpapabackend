@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 資料庫
+  postgres:
+    image: postgres:16-alpine
+    container_name: fivepapa-postgres
+    environment:
+      POSTGRES_DB: fivepapa_dev
+      POSTGRES_USER: fivepapa_user
+      POSTGRES_PASSWORD: dev_password_123
+    ports:
+      - "5432:5432"
+    volumes:
+      # 將資料持久化到本機（容器重啟資料不會消失）
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fivepapa_user -d fivepapa_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot 應用程式
+  backend:
+    build: .
+    container_name: fivepapa-backend
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      # PostgreSQL 連線設定
+      DATABASE_URL: jdbc:postgresql://postgres:5432/fivepapa_dev
+      DATABASE_USERNAME: fivepapa_user
+      DATABASE_PASSWORD: dev_password_123
+      DATABASE_DRIVER: org.postgresql.Driver
+      DATABASE_PLATFORM: org.hibernate.dialect.PostgreSQLDialect
+      # 開發環境用 update（保留資料），不用 create-drop
+      DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # 開發時可以掛載程式碼，實現熱重載（可選）
+    # volumes:
+    #   - ./target:/app/target
+
+volumes:
+  postgres_data:
+    driver: local
