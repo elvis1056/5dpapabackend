@@ -1,0 +1,35 @@
+# ========================================
+# Common Application Configuration
+# Profile-specific settings in application-{profile}.yml
+# ========================================
+
+spring:
+  # Application Name
+  application:
+    name: 5dpapa-backend
+
+  # ========================================
+  # Active Profile
+  # Default: dev (H2)
+  # Production: prod (PostgreSQL)
+  # ========================================
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # ========================================
+  # JPA Common Configuration
+  # ========================================
+  jpa:
+    # Recommended: Disable OSIV to avoid lazy loading issues
+    open-in-view: false
+
+  # ========================================
+  # RFC 7807 Problem Details for HTTP APIs
+  # ========================================
+  mvc:
+    problemdetails:
+      enabled: true
+
+# Server Configuration
+server:
+  port: ${PORT:8080}

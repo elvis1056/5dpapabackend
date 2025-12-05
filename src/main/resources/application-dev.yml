@@ -1,0 +1,53 @@
+# ========================================
+# Development Profile
+# Usage: Run with --spring.profiles.active=dev
+# ========================================
+# Two modes:
+# 1. Docker Compose: Uses PostgreSQL (set DATABASE_URL env var)
+# 2. Standalone: Uses H2 in-memory (default)
+# ========================================
+
+spring:
+  # Database Configuration
+  # If DATABASE_URL is set (Docker), use it; otherwise fallback to H2
+  datasource:
+    url: ${DATABASE_URL:jdbc:h2:mem:testdb}
+    username: ${DATABASE_USERNAME:sa}
+    password: ${DATABASE_PASSWORD:}
+    driver-class-name: ${DATABASE_DRIVER:org.h2.Driver}
+
+  # JPA Configuration
+  # If using PostgreSQL, it will auto-detect; otherwise use H2
+  jpa:
+    database-platform: ${DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
+    hibernate:
+      ddl-auto: ${DDL_AUTO:create-drop}
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # H2 Console (only works when using H2)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+# JWT Configuration
+# JWT_SECRET: 用於簽署和驗證 JWT token 的密鑰（使用 HS512 算法，至少需要 64 字元）
+JWT_SECRET: EK6+mTva6Ancxs5kuOLqgl5r0sVczlyp2Rym4xWnvMglyrminz9B1/clEuhFIDk4TjOLi95Q2ShyfNEDG9mlYQ==
+# JWT_EXPIRATION_MS: Access Token 過期時間（毫秒），預設 1 小時 = 3600000ms
+JWT_EXPIRATION_MS: 3600000
+# JWT_REFRESH_EXPIRATION_MS: Refresh Token 過期時間（毫秒），預設 24 小時 = 86400000ms
+JWT_REFRESH_EXPIRATION_MS: 86400000
+
+# Cookie Security (set to false for local development without HTTPS)
+COOKIE_SECURE: false
+
+# Logging
+logging:
+  level:
+    com.fivepapa.backend: DEBUG
+    org.springframework.security: DEBUG
