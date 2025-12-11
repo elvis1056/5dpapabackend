@@ -20,6 +20,7 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.http.HttpMethod;
 
 import java.util.Arrays;
 
@@ -58,7 +59,9 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/auth/register",
                                 "/api/auth/refresh",
-                                "/api/auth/logout"
+                                "/api/auth/logout",
+                                // E-commerce API (uses JWT Bearer token, doesn't need CSRF)
+                                "/api/products/**"
                         );
 
                     // Disable CSRF for H2 Console in development
@@ -78,6 +81,14 @@ public class SecurityConfig {
                             "/api/auth/logout",
                             "/api/csrf"
                     ).permitAll();
+
+                    // ===== E-commerce Product Endpoints =====
+                    // Public: Browse products (GET only)
+                    auth.requestMatchers(HttpMethod.GET, "/api/products/**").permitAll();
+                    // Admin only: Manage products (POST/PUT/DELETE)
+                    auth.requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN");
+                    auth.requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN");
+                    auth.requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN");
 
                     // ===== Development Only Endpoints =====
                     if (isDevelopment) {
