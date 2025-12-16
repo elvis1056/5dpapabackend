@@ -33,6 +33,11 @@ public class Product {
     @Column(name = "image_url", length = 500)
     private String imageUrl;  // 商品圖片網址
 
+    // 商品分類（ManyToOne）- 一個產品屬於一個分類
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Column(nullable = false)
     private Boolean active = true;  // 是否上架
 
