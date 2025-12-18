@@ -33,6 +33,9 @@ public class Product {
     @Column(name = "image_url", length = 500)
     private String imageUrl;  // 商品圖片網址
 
+    @Column(nullable = false)
+    private Boolean featured = false; // 顯示是否熱門
+
     // 商品分類（ManyToOne）- 一個產品屬於一個分類
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
