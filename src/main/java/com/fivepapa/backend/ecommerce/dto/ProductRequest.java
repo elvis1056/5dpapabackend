@@ -23,5 +23,9 @@ public class ProductRequest {
 
     private String imageUrl;
 
+    // 商品分類 ID（可選，允許商品沒有分類）
+    private Long categoryId;
+
     private Boolean active = true;
+    private Boolean featured = false;
 }

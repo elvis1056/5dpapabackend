@@ -17,6 +17,12 @@ public class ProductResponse {
     private Integer stock;
     private String imageUrl;
     private Boolean active;
+    private Boolean featured;
+
+    // 分類資訊
+    private Long categoryId;
+    private String categoryName;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
