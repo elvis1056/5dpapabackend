@@ -45,6 +45,8 @@ JWT_REFRESH_EXPIRATION_MS: ${JWT_REFRESH_EXPIRATION_MS:86400000}
 
 # Cookie Security (MUST be true in production for HTTPS)
 COOKIE_SECURE: true
+# Cookie SameSite (use None for production to support cross-origin with HTTPS)
+COOKIE_SAME_SITE: None
 
 # Production Logging
 logging:

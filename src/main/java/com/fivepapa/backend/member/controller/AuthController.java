@@ -31,6 +31,9 @@ public class AuthController {
     @Value("${COOKIE_SECURE:true}")
     private boolean cookieSecure;
 
+    @Value("${COOKIE_SAME_SITE:Lax}")
+    private String cookieSameSite;
+
     /**
      * Register a new user
      * POST /api/auth/register
@@ -128,7 +131,7 @@ public class AuthController {
         cookie.setSecure(cookieSecure);  // Controlled by COOKIE_SECURE env var (true in prod, false in dev)
         cookie.setPath("/");
         cookie.setMaxAge(refreshTokenExpirationDays * 24 * 60 * 60); // Convert days to seconds
-        cookie.setAttribute("SameSite", "None"); // Required for cross-origin requests
+        cookie.setAttribute("SameSite", cookieSameSite); // Controlled by COOKIE_SAME_SITE env var (Lax in dev, None in prod)
 
         response.addCookie(cookie);
     }
@@ -143,7 +146,7 @@ public class AuthController {
         cookie.setSecure(cookieSecure);  // Match the setting in setRefreshTokenCookie
         cookie.setPath("/");
         cookie.setMaxAge(0); // Expire immediately
-        cookie.setAttribute("SameSite", "None");
+        cookie.setAttribute("SameSite", cookieSameSite); // Match the setting in setRefreshTokenCookie
 
         response.addCookie(cookie);
     }

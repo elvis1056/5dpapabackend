@@ -45,6 +45,8 @@ JWT_REFRESH_EXPIRATION_MS: 86400000
 
 # Cookie Security (set to false for local development without HTTPS)
 COOKIE_SECURE: false
+# Cookie SameSite (use Lax for local development, None for production with HTTPS)
+COOKIE_SAME_SITE: Lax
 
 # Logging
 logging:
