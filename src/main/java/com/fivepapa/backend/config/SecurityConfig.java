@@ -62,7 +62,8 @@ public class SecurityConfig {
                                 "/api/auth/logout",
                                 // E-commerce API (uses JWT Bearer token, doesn't need CSRF)
                                 "/api/products/**",
-                                "/api/categories/**"
+                                "/api/categories/**",
+                                "/api/cart/**"
                         );
 
                     // Disable CSRF for H2 Console in development
@@ -98,6 +99,10 @@ public class SecurityConfig {
                     auth.requestMatchers(HttpMethod.POST, "/api/categories/**").hasRole("ADMIN");
                     auth.requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("ADMIN");
                     auth.requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN");
+
+                    // ===== E-commerce Cart Endpoints =====
+                    // Authenticated users only: Manage shopping cart
+                    auth.requestMatchers("/api/cart/**").authenticated();
 
                     // ===== Development Only Endpoints =====
                     if (isDevelopment) {
